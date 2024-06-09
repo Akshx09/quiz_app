@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/quiz..dart';
 import 'package:quiz_app/models/questionsdata.dart';
-import 'package:quiz_app/models/questions.dart';
+import 'question_summary.dart';
 
 class ResultsScreen extends StatelessWidget {
-  const ResultsScreen({super.key, required this.chosenAnswers});
+   ResultsScreen({super.key, required this.chosenAnswers});
 
   final List<String> chosenAnswers;
   List<Map<String,Object>> getSummaryData(){
@@ -20,22 +19,27 @@ class ResultsScreen extends StatelessWidget {
       }
     return summary;
   }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(25.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment:CrossAxisAlignment.center ,
-        children: [
-           Text('You answer x correct!!!')
-          ,
-          SizedBox(height: 30,),
-          ListView(),
-          SizedBox(height: 25,),
-          TextButton(onPressed: (){}, child: Text('Restart Quiz')),
-        ],
-      ),
+    final summaryData= getSummaryData();
+    final numtotalques=questions.length;
+    final numofcirrectques=summaryData.where((data){
+      return data['userans']==data['correctans'];
+    }).length;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment:CrossAxisAlignment.center ,
+      children: [
+          Text('You answer $numofcirrectques correct out $numtotalques!!!')
+        ,
+       const SizedBox(height: 30,),
+        QuestionsSummary(getSummaryData()),
+        const SizedBox(height: 25,),
+         TextButton(onPressed: (){
+
+         }, child: Text('Restart Quiz')),
+      ],
     );
   }
 }
